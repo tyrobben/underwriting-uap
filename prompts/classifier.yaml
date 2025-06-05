@@ -6,14 +6,17 @@ task: >
   and appetite_flag (Undewrite | Refer | Decline Appetite | Decline Treaty | Decline Guidelines | Quote | Decline Underwriting Notes).
 
 output_schema:
-  naics: string               # e.g. 238120
-  sic: string                 # e.g. 1795
-  am_best_class: string       # e.g. Steel Erection
-  iso_gl_code: string         # 5-digit number, e.g. 98174
-  iso_gl_desc: string         # Title/description, e.g. "Steel Fabrication—shop"
-  vehicle_types: list[string] # ["Private Passenger", "Light Truck"]
-  appetite_flag: string       # "Quote" | "Refer" | "Decline"
-  citations: list[string]     # Contextual source_ids
+  naics: list[string]
+  sic: list[string]
+  am_best_class: string
+  iso_gl:            # list so you can include multiples later
+    - code: string
+      desc: string
+  vehicle_types:
+    - type: string   # e.g. "Light Truck"
+      count: int     # number of units
+  appetite_flag: string         # Quote | Refer | Decline
+  citations: list[string]
 
 retrieval:                    # overrides system defaults
   top_k: 8
@@ -35,15 +38,17 @@ instructions:
            General Liability: Products - Completed Operations |
            Automobile Liability
         5. UNDERWRITER'S CHECKLIST
-        
 
       When multiple chunks match, pick the one with the highest Retrieval score.
-      iso_gl_code / iso_gl_desc, naics, and sic come primarily from the *Codes and Classifications* sections.
-      Use the Hazard Index, Risk Description, Lines-of-Coverage, and Underwriter’s Checklist sections to set
-      appetite_flag and provide underwriting rationale.
+      iso_gl entries, naics, and sic come primarily from the *Codes and Classifications* sections.
+      Use the Hazard Index, Risk Description, Lines-of-Coverage, and Underwriter’s Checklist sections
+      to set appetite_flag and provide underwriting rationale.
       Provide at least one citation (`{{source_id}}`) for every field.
       If any mandatory field has confidence < 0.5, respond `INSUFFICIENT_CONTEXT`.
+
   - Return JSON **only**—no extra prose.
+  - Include **all** applicable NAICS and SIC codes as arrays.
+  - For `vehicle_types`, return each distinct type with its unit count.
 
 few_shot_examples:
   - file: examples/cls_good.md
