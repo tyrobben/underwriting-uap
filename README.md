@@ -26,3 +26,25 @@ Repo skeleton for UAP v1.0 – keeps context small for the LLM.
      "appetite_flag": "Quote|Refer|Decline",
      "citations": [ "source_id" ]
    }
+
+## 📌 Project Snapshot — 2025-06-04
+
+| Milestone | Status | Key Artifacts |
+|-----------|--------|---------------|
+| Repo scaffold & CI (Days 1-2) | ✅ complete | README, ADR-0001, GitHub Actions |
+| Knowledge Base v1 (Days 3-5) | ✅ complete | Datastore **uap-kb** (~600 docs) |
+| Prompt Library v0 (Days 6-8) | ✅ complete | `prompts/` folder |
+| Snapshot Tests (P-3) (Days 9-11) | ✅ **2 tests passing** | `tests/test_classifier_prompt.py` |
+
+**Current Classifier JSON schema**
+
+```json
+{
+  "naics": ["string"],
+  "sic": ["string"],
+  "am_best_class": "string",
+  "iso_gl": [{ "code": "string", "desc": "string" }],
+  "vehicle_types": [{ "type": "string", "count": 0 }],
+  "appetite_flag": "Quote|Refer|Decline",
+  "citations": ["source_id"]
+}
